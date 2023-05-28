@@ -44,6 +44,13 @@ interface IForm {
   friend: string;
 }
 
+const customTabProps = {
+  bgColor: 'gray.100',
+  _selected: { color: 'white', bg: 'red.500' },
+  fontSize: '14px',
+  fontWeight: 'bold',
+};
+
 function userInfo() {
   const { handleSubmit, control, watch } = useForm<IForm>();
   const toast = useToast();
@@ -70,30 +77,9 @@ function userInfo() {
     <Box p="36px 36px">
       <Tabs isFitted variant="soft-rounded">
         <TabList w="100%" h="50px" gap={2}>
-          <Tab
-            bgColor="gray.100"
-            _selected={{ color: 'white', bg: 'red.500' }}
-            fontSize="16px"
-            fontWeight="bold"
-          >
-            내정보
-          </Tab>
-          <Tab
-            bgColor="gray.100"
-            _selected={{ color: 'white', bg: 'red.500' }}
-            fontSize="16px"
-            fontWeight="bold"
-          >
-            정보수정
-          </Tab>
-          <Tab
-            bgColor="gray.100"
-            _selected={{ color: 'white', bg: 'red.500' }}
-            fontSize="16px"
-            fontWeight="bold"
-          >
-            친구찾기
-          </Tab>
+          <Tab {...customTabProps}>내정보</Tab>
+          <Tab {...customTabProps}>정보수정</Tab>
+          <Tab {...customTabProps}>친구찾기</Tab>
         </TabList>
         <Avatar
           bg="gray.400"
@@ -108,7 +94,7 @@ function userInfo() {
           <TabPanel>
             <Card
               align="center"
-              w="80%"
+              w="100%"
               margin="0 auto"
               mt="24px"
               boxShadow="0 2px 16px rgba(0, 0, 0, 0.12)"
