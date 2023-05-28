@@ -1,5 +1,6 @@
 import { EmailIcon, KeyIcon, EyeIcon, EyeCloseIcon } from '@/Icons/icons';
 import CommonInput from '@/components/CommonInput';
+import ShaderText from '@/components/ShaderText';
 import {
   Box,
   Button,
@@ -19,6 +20,18 @@ interface IForm extends FieldValues {
   password: string;
   checkPassword?: string;
 }
+
+const props = {
+  fontSize: '4xl',
+  fontWeight: 'bold',
+  color: '#823fea',
+  textShadow: '2px -1px 0 #e60bf0, -2px 1px 0 #34e6fe',
+  mt: '43px',
+  mb: '140px',
+  height: '30px',
+};
+
+const text = 'Welcome To \n YoKHURoute!';
 
 function login() {
   const [authMode, setAuthMode] = useState<string>('login');
@@ -60,22 +73,19 @@ function login() {
 
   return (
     <Box p="36px 36px">
-      <Heading>YoKHURoute</Heading>
-      <Text as="p" fontSize="xl" fontWeight="bold" mt="86px" mb="48px">
-        Welcome in YoKHURoute!
-      </Text>
+      <ShaderText {...props}>{text}</ShaderText>
       <Tabs isFitted variant="soft-rounded">
         <TabList onClick={onClick}>
           <Tab
             bgColor="gray.100"
-            _selected={{ color: 'white', bg: 'red.500' }}
+            _selected={{ color: 'white', bg: 'gray.700' }}
             value="login"
           >
             로그인
           </Tab>
           <Tab
             bgColor="gray.100"
-            _selected={{ color: 'white', bg: 'red.500' }}
+            _selected={{ color: 'white', bg: 'gray.700' }}
             value="signup"
           >
             회원가입
@@ -113,8 +123,11 @@ function login() {
           />
         )}
       </VStack>
-      <Button w="100%" colorScheme="red" mt="36px" isDisabled={!valid}>
+      <Button w="100%" colorScheme="purple" mt="36px" isDisabled={!valid}>
         {authMode === 'login' ? '로그인' : '회원가입'}
+      </Button>
+      <Button w="100%" colorScheme="messenger" mt="18px">
+        구글로 시작하기
       </Button>
     </Box>
   );
