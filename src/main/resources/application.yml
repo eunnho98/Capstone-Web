@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://yokhu-db.cqkdbesfchc6.ap-northeast-2.rds.amazonaws.com:3306/YoKhuRoute?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: 12111211
+  jpa:
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  sql:
+    init:
+      mode: always
+  redis:
+    #host: ec2-3-39-18-82.ap-northeast-2.compute.amazonaws.com
+    host: localhost
+    port: 6379
+  profiles:
+    include: jwt
+
