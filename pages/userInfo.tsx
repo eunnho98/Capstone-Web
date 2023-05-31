@@ -46,7 +46,7 @@ interface IForm {
 
 const customTabProps = {
   bgColor: 'gray.100',
-  _selected: { color: 'white', bg: 'red.500' },
+  _selected: { color: 'white', bg: 'gray.600' },
   fontSize: '14px',
   fontWeight: 'bold',
 };
@@ -54,6 +54,9 @@ const customTabProps = {
 function userInfo() {
   const { handleSubmit, control, watch } = useForm<IForm>();
   const toast = useToast();
+
+  const onLogout = async () => {};
+
   const onClickFriend = () => {
     toast({
       title: '친구 요청 완료!',
@@ -125,6 +128,16 @@ function userInfo() {
                 </VStack>
               </CardBody>
             </Card>
+            <Button
+              display="block"
+              justifyContent="center"
+              colorScheme="purple"
+              margin="0 auto"
+              mt="24px"
+              onClick={onClickInfo}
+            >
+              로그아웃
+            </Button>
           </TabPanel>
           {/* 정보수정 */}
           <TabPanel>
@@ -161,7 +174,7 @@ function userInfo() {
             <Button
               display="block"
               justifyContent="center"
-              colorScheme="red"
+              colorScheme="purple"
               margin="0 auto"
               mt="48px"
               onClick={onClickInfo}
@@ -179,7 +192,7 @@ function userInfo() {
                 icons={<EmailIcon />}
                 placeholder="이메일"
               />
-              <Button colorScheme="red" mt="32px" onClick={onClickFriend}>
+              <Button colorScheme="purple" mt="32px" onClick={onClickFriend}>
                 친구요청
               </Button>
             </VStack>
