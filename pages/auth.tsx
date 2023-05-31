@@ -1,6 +1,7 @@
 import { EmailIcon, KeyIcon, EyeIcon, EyeCloseIcon } from '@/Icons/icons';
 import CommonInput from '@/components/CommonInput';
 import ShaderText from '@/components/ShaderText';
+import { loginAPI } from '@/lib/api/auth';
 import {
   Box,
   Button,
@@ -12,6 +13,8 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
+import axios from 'axios';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 
@@ -71,6 +74,27 @@ function login() {
     }
   });
 
+  // const onLogin = async () => {
+  //   try {
+  //     const res = await loginAPI();
+  //     console.log(res);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const onLogin = async () => {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: '/login/oauth2/code/google',
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Box p="36px 36px">
       <ShaderText {...props}>{text}</ShaderText>
@@ -126,9 +150,12 @@ function login() {
       <Button w="100%" colorScheme="purple" mt="36px" isDisabled={!valid}>
         {authMode === 'login' ? '로그인' : '회원가입'}
       </Button>
-      <Button w="100%" colorScheme="messenger" mt="18px">
+      <Button w="100%" colorScheme="messenger" mt="18px" onClick={onLogin}>
         구글로 시작하기
       </Button>
+      <Link href="https://accounts.google.com/o/oauth2/v2/auth?scope=openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&access_type=offline&include_granted_scope=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=https://yokhuroute.store/login/oauth2/code/google&client_id=759416534029-0idv1eac509hpu7h66na8bn4pug1k9ou.apps.googleusercontent.com">
+        <Button>이동</Button>
+      </Link>
     </Box>
   );
 }
