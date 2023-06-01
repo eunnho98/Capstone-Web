@@ -114,7 +114,9 @@ function login() {
     const googleLoginURL =
       'https://accounts.google.com/o/oauth2/v2/auth?scope=openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&access_type=offline&include_granted_scope=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=https://capstone-web-zeta.vercel.app/api/auth/getCode&client_id=759416534029-0idv1eac509hpu7h66na8bn4pug1k9ou.apps.googleusercontent.com';
     router.push(googleLoginURL);
-    const res = await getCodeAPI();
+    const res = await axios.get(
+      'https://capstone-web-zeta.vercel.app/api/auth/getCode',
+    );
     console.log(res);
   };
 
