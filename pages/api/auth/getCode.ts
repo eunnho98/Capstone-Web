@@ -2,13 +2,13 @@
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default function (req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     console.log(req);
     const { code } = req.query;
     console.log('code:', code);
     try {
-      const result = axios.get(
+      const result = await axios.get(
         'https://yokhuroute.store/login/oauth2/code/google',
         {
           params: { code: code },
