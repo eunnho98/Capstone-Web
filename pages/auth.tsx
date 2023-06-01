@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 
@@ -42,6 +43,7 @@ function login() {
   const [checkHide, setCheckHide] = useState<boolean>(true);
   const { handleSubmit, control, watch, setValue } = useForm<IForm>();
   const [valid, setValid] = useState(false);
+  const router = useRouter();
   const onClick = (e) => {
     setAuthMode(e.target.value);
     setValue('email', '');
@@ -84,15 +86,34 @@ function login() {
   // };
 
   const onLogin = async () => {
+    const code =
+      '4%2F0AbUR2VOxi6eiCBM7gnjOkRFt7BydH-jAaFEu15Wecr8sobBHetWYV_1CRfcgKotNUhkULw';
+    const code2 = decodeURIComponent(
+      '4%2F0AbUR2VOxi6eiCBM7gnjOkRFt7BydH-jAaFEu15Wecr8sobBHetWYV_1CRfcgKotNUhkULw',
+    );
+    const code3 = decodeURIComponent(
+      '4%2F0AbUR2VNAgqdQT8ltWl_F1lY5SGx5HORFjMxY9q0TLdjzsc88dklN3NTeJuohTqt0FOyxNQ',
+    );
     try {
-      const res = await axios({
-        method: 'get',
-        url: '/login/oauth2/code/google',
+      // const res = await axios({
+      //   method: 'get',
+      //   url: '/login/oauth2/code/google',
+      // });
+      const res = await axios.get('/login/oauth2/code/google', {
+        params: {
+          code: code3,
+        },
       });
       console.log(res);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const onTest = async () => {
+    const googleLoginURL =
+      'https://accounts.google.com/o/oauth2/v2/auth?scope=openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&access_type=offline&include_granted_scope=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=https://yokhuroute.store/login/oauth2/code/google&client_id=759416534029-0idv1eac509hpu7h66na8bn4pug1k9ou.apps.googleusercontent.com';
+    router.push(googleLoginURL);
   };
 
   return (
@@ -153,9 +174,7 @@ function login() {
       <Button w="100%" colorScheme="messenger" mt="18px" onClick={onLogin}>
         구글로 시작하기
       </Button>
-      <Link href="https://accounts.google.com/o/oauth2/v2/auth?scope=openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&access_type=offline&include_granted_scope=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=https://yokhuroute.store/login/oauth2/code/google&client_id=759416534029-0idv1eac509hpu7h66na8bn4pug1k9ou.apps.googleusercontent.com">
-        <Button>이동</Button>
-      </Link>
+      <Button onClick={onTest}>이동</Button>
     </Box>
   );
 }
