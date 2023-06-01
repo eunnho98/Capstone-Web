@@ -9,7 +9,7 @@ export default function (req: NextApiRequest, res: NextApiResponse) {
     console.log('code:', code);
     try {
       const result = axios.get(
-        'https://yokhuroute.store:8080/login/oauth2/code/google',
+        'https://yokhuroute.store/login/oauth2/code/google',
         {
           params: { code: code },
         },
