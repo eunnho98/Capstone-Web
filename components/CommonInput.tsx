@@ -1,5 +1,5 @@
 import { Input, InputGroup, InputLeftAddon } from '@chakra-ui/react';
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import {
   Control,
   FieldPath,
@@ -20,7 +20,7 @@ type TControl<T extends FieldValues> = {
   type: string;
   errorMessage?: string;
   valueProp?: string;
-  myChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+  myChange?: MouseEventHandler;
 };
 
 function CommonInput({
