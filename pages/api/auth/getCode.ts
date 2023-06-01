@@ -15,8 +15,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         },
       );
       console.log('result', result);
+      console.log('header', result.headers);
       res.statusCode = 200;
-      res.json(result);
+      const ssibal = JSON.stringify(result);
+      console.log(ssibal);
+      res.send(ssibal);
     } catch (error) {
       console.log(error);
       res.statusCode = 500;
