@@ -15,9 +15,12 @@ export default function (req: NextApiRequest, res: NextApiResponse) {
         },
       );
       console.log('result', result);
+      res.statusCode = 200;
       res.json(result);
     } catch (error) {
       console.log(error);
+      res.statusCode = 500;
+      return res.send(error);
     }
   }
 }
