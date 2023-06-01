@@ -1,4 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default function (req: NextApiRequest, res: NextApiResponse) {
@@ -6,6 +7,17 @@ export default function (req: NextApiRequest, res: NextApiResponse) {
     console.log(req);
     const { code } = req.query;
     console.log('code:', code);
-    res.json(code);
+    try {
+      const result = axios.get(
+        'https://yokhuroute.store:8080/login/oauth2/code/google',
+        {
+          params: { code: code },
+        },
+      );
+      console.log('result', result);
+      res.json(result);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
