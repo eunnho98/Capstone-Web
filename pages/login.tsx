@@ -9,6 +9,8 @@ function login() {
   const [user, setUser] = useRecoilState(userState);
   const router = useRouter();
   const code = router.query.code as string;
+  console.log(router);
+  console.log(code);
   const getResult = async (code: string) => {
     const result = await axios.get(
       'https://yokhuroute.store/login/oauth2/code/google',
