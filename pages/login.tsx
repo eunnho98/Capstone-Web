@@ -20,8 +20,7 @@ function login() {
   };
   if (code !== undefined) {
     try {
-      const result: any = getResult(code);
-      console.log('result', result);
+      getResult(code).then((res) => console.log(res));
       // userData = {
       //   nickname: result.data.nickname,
       //   username: result.data.username,
