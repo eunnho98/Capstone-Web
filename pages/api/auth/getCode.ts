@@ -1,14 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { userState } from '@/atom/atom';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { useSetRecoilState } from 'recoil';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     const { code } = req.query;
     console.log('code:', code);
-    const setUser = useSetRecoilState(userState);
     try {
       const result = await axios.get(
         'https://yokhuroute.store/login/oauth2/code/google',
@@ -24,7 +21,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         email: result.data.email,
         accessToken: result.headers.authorization,
       };
-      setUser(userData);
       res.statusCode = 200;
       res.json(userData);
     } catch (error) {

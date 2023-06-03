@@ -1,4 +1,5 @@
 import { EmailIcon, KeyIcon, EyeIcon, EyeCloseIcon } from '@/Icons/icons';
+import { userState } from '@/atom/atom';
 import CommonInput from '@/components/CommonInput';
 import ShaderText from '@/components/ShaderText';
 import { getCodeAPI, loginAPI } from '@/lib/api/auth';
@@ -18,6 +19,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
 
 interface IForm extends FieldValues {
   email: string;
@@ -38,6 +40,7 @@ const props = {
 const text = 'Welcome To \n YoKHURoute!';
 
 function login() {
+  const [user, setUser] = useRecoilState(userState);
   const [authMode, setAuthMode] = useState<string>('login');
   const [hide, setHide] = useState<boolean>(true);
   const [checkHide, setCheckHide] = useState<boolean>(true);
@@ -114,13 +117,10 @@ function login() {
     const googleLoginURL =
       'https://accounts.google.com/o/oauth2/v2/auth?scope=openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&access_type=offline&include_granted_scope=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=https://capstone-web-zeta.vercel.app/api/auth/getCode&client_id=759416534029-0idv1eac509hpu7h66na8bn4pug1k9ou.apps.googleusercontent.com';
     router.push(googleLoginURL);
-    const res = await axios.get(
+    const res: any = await axios.get(
       'https://capstone-web-zeta.vercel.app/api/auth/getCode',
     );
-    console.log(res);
-    if (res) {
-      router.push('https://capstone-web-zeta.vercel.app/api/userInfo');
-    }
+    setUser(res);
   };
 
   return (
