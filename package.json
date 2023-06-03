@@ -27,7 +27,8 @@
     "react-hook-form": "^7.43.9",
     "react-icons": "^4.8.0",
     "react-query": "^3.39.3",
-    "recoil": "^0.7.7"
+    "recoil": "^0.7.7",
+    "recoil-persist": "^4.2.0"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^19.0.4",
