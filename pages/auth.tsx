@@ -40,6 +40,7 @@ const props = {
 const text = 'Welcome To \n YoKHURoute!';
 
 function login() {
+  let res: any;
   const [user, setUser] = useRecoilState(userState);
   const [authMode, setAuthMode] = useState<string>('login');
   const [hide, setHide] = useState<boolean>(true);
@@ -79,14 +80,9 @@ function login() {
     }
   });
 
-  // const onLogin = async () => {
-  //   try {
-  //     const res = await loginAPI();
-  //     console.log(res);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  useEffect(() => {
+    console.log(res);
+  }, [res]);
 
   const onLogin = async () => {
     const code =
@@ -117,7 +113,7 @@ function login() {
     const googleLoginURL =
       'https://accounts.google.com/o/oauth2/v2/auth?scope=openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&access_type=offline&include_granted_scope=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=https://capstone-web-zeta.vercel.app/api/auth/getCode&client_id=759416534029-0idv1eac509hpu7h66na8bn4pug1k9ou.apps.googleusercontent.com';
     router.push(googleLoginURL);
-    const res: any = await axios.get(
+    res = await axios.get(
       'https://capstone-web-zeta.vercel.app/api/auth/getCode',
     );
     setUser(res);
