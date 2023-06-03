@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 
 const localStorage =
@@ -17,7 +17,7 @@ interface IUserData {
 }
 
 export const userState = atom<IUserData>({
-  key: 'user',
+  key: 'userState',
   default: {
     nickname: '',
     username: '',
@@ -25,4 +25,12 @@ export const userState = atom<IUserData>({
     accessToken: '',
   },
   effects_UNSTABLE: [persistAtom],
+});
+
+export const getAccessToken = selector({
+  key: 'accessToken',
+  get: ({ get }) => {
+    const copy = get(userState);
+    return copy.accessToken;
+  },
 });

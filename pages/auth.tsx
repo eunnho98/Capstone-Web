@@ -1,25 +1,10 @@
 import { EmailIcon, KeyIcon, EyeIcon, EyeCloseIcon } from '@/Icons/icons';
-import { userState } from '@/atom/atom';
 import CommonInput from '@/components/CommonInput';
 import ShaderText from '@/components/ShaderText';
-import { getCodeAPI, loginAPI } from '@/lib/api/auth';
-import {
-  Box,
-  Button,
-  Heading,
-  Input,
-  Tab,
-  TabList,
-  Tabs,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
-import axios from 'axios';
-import Link from 'next/link';
+import { Box, Button, Tab, TabList, Tabs, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import { useRecoilState } from 'recoil';
 
 interface IForm extends FieldValues {
   email: string;
@@ -40,12 +25,10 @@ const props = {
 const text = 'Welcome To \n YoKHURoute!';
 
 function login() {
-  let res: any;
-  const [user, setUser] = useRecoilState(userState);
   const [authMode, setAuthMode] = useState<string>('login');
   const [hide, setHide] = useState<boolean>(true);
   const [checkHide, setCheckHide] = useState<boolean>(true);
-  const { handleSubmit, control, watch, setValue } = useForm<IForm>();
+  const { control, watch, setValue } = useForm<IForm>();
   const [valid, setValid] = useState(false);
   const router = useRouter();
   const onClick = (e) => {
@@ -80,43 +63,10 @@ function login() {
     }
   });
 
-  useEffect(() => {
-    console.log(res);
-  }, [res]);
-
-  const onLogin = async () => {
-    const code =
-      '4%2F0AbUR2VOxi6eiCBM7gnjOkRFt7BydH-jAaFEu15Wecr8sobBHetWYV_1CRfcgKotNUhkULw';
-    const code2 = decodeURIComponent(
-      '4%2F0AbUR2VOxi6eiCBM7gnjOkRFt7BydH-jAaFEu15Wecr8sobBHetWYV_1CRfcgKotNUhkULw',
-    );
-    const code3 = decodeURIComponent(
-      '4%2F0AbUR2VNAgqdQT8ltWl_F1lY5SGx5HORFjMxY9q0TLdjzsc88dklN3NTeJuohTqt0FOyxNQ',
-    );
-    try {
-      // const res = await axios({
-      //   method: 'get',
-      //   url: '/login/oauth2/code/google',
-      // });
-      const res = await axios.get('/login/oauth2/code/google', {
-        params: {
-          code: code3,
-        },
-      });
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const onTest = async () => {
+  const onLogin = () => {
     const googleLoginURL =
       'https://accounts.google.com/o/oauth2/v2/auth?scope=openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&access_type=offline&include_granted_scope=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=https://capstone-web-zeta.vercel.app/login&client_id=759416534029-0idv1eac509hpu7h66na8bn4pug1k9ou.apps.googleusercontent.com';
     router.push(googleLoginURL);
-    res = await axios.get(
-      'https://capstone-web-zeta.vercel.app/api/auth/getCode',
-    );
-    setUser(res);
   };
 
   return (
@@ -171,13 +121,24 @@ function login() {
           />
         )}
       </VStack>
-      <Button w="100%" colorScheme="purple" mt="36px" isDisabled={!valid}>
+      <Button
+        w="100%"
+        colorScheme="purple"
+        mt="36px"
+        isDisabled={!valid}
+        letterSpacing="2px"
+      >
         {authMode === 'login' ? '로그인' : '회원가입'}
       </Button>
-      <Button w="100%" colorScheme="messenger" mt="18px" onClick={onLogin}>
+      <Button
+        w="100%"
+        colorScheme="messenger"
+        mt="18px"
+        onClick={onLogin}
+        letterSpacing="1px"
+      >
         구글로 시작하기
       </Button>
-      <Button onClick={onTest}>이동</Button>
     </Box>
   );
 }
