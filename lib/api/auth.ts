@@ -4,3 +4,10 @@ export const loginAPI = (code: string) =>
   axios.get('/login/oauth2/code/google', {
     params: { code: code },
   });
+
+export const logoutAPI = (token: string) =>
+  axios.get('/oauth2/sign-out', {
+    headers: {
+      Authorization: token,
+    },
+  });

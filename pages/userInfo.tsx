@@ -1,6 +1,7 @@
 import { EmailIcon, EyeCloseIcon, EyeIcon, KeyIcon } from '@/Icons/icons';
 import { userState } from '@/atom/atom';
 import CommonInput from '@/components/CommonInput';
+import { logoutAPI } from '@/lib/api/auth';
 import {
   Avatar,
   AvatarBadge,
@@ -20,6 +21,7 @@ import {
   VStack,
   useToast,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
@@ -55,10 +57,31 @@ const customTabProps = {
 
 function userInfo() {
   const [user, setUser] = useRecoilState(userState);
-  const { handleSubmit, control, watch } = useForm<IForm>();
+  const { control } = useForm<IForm>();
   const toast = useToast();
+  const router = useRouter();
+  const logout = async (token: string) => {
+    const res = await logoutAPI(token);
+    return res;
+  };
 
-  const onLogout = async () => {};
+  const onLogout = () => {
+    try {
+      logout(user.accessToken).then((res) => {
+        console.log(res);
+        const userData = {
+          nickname: '',
+          username: '',
+          email: '',
+          accessToken: '',
+        };
+        setUser(userData);
+      });
+      router.push('/auth');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onClickFriend = () => {
     toast({
@@ -143,7 +166,7 @@ function userInfo() {
               colorScheme="purple"
               margin="0 auto"
               mt="24px"
-              onClick={onClickInfo}
+              onClick={onLogout}
             >
               로그아웃
             </Button>

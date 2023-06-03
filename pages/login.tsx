@@ -1,9 +1,8 @@
 import { userState } from '@/atom/atom';
 import { loginAPI } from '@/lib/api/auth';
 import { Button, Heading, SlideFade, VStack } from '@chakra-ui/react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
 function login() {
@@ -15,6 +14,7 @@ function login() {
     const result = await loginAPI(code);
     return result;
   };
+
   if (code !== undefined) {
     try {
       getResult(code).then((res) => {
@@ -31,11 +31,26 @@ function login() {
     }
   }
 
-  if (!user.nickname) {
+  if (!user.nickname || user.username === '') {
     return (
-      <Heading textAlign="center" p="200px 40px">
-        Loading...
-      </Heading>
+      <VStack p="200px 40px" gap={4}>
+        <Heading textAlign="center">Loading...</Heading>
+        <Heading>로그인하지 않았나요?</Heading>
+        <Button
+          w="240px"
+          h="50px"
+          fontSize="24px"
+          letterSpacing="2px"
+          lineHeight="32px"
+          display="block"
+          colorScheme="purple"
+          onClick={() => {
+            router.push('/auth');
+          }}
+        >
+          로그인하러 가기
+        </Button>
+      </VStack>
     );
   }
 
