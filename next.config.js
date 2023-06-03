@@ -4,8 +4,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/:path*',
-        destination: 'https://yokhuroute.store/:path*',
+        source: '/login/oauth2/code/google',
+        destination: 'https://yokhuroute.store/login/oauth2/code/google',
       },
     ];
   },
