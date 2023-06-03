@@ -12,12 +12,9 @@ function login() {
   console.log(router);
   console.log(code);
   const getResult = async (code: string) => {
-    const result = await axios.get(
-      'https://yokhuroute.store/login/oauth2/code/google',
-      {
-        params: { code: code },
-      },
-    );
+    const result = await axios.get('/login/oauth2/code/google', {
+      params: { code: code },
+    });
     return result;
   };
   if (code) {
