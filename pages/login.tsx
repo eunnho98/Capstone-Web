@@ -9,8 +9,7 @@ function login() {
   // let userData: any;
   const [user, setUser] = useRecoilState(userState);
   const router = useRouter();
-  const [code, setCode] = useState('');
-  setCode(router.query.code as string);
+  const code = router.query.code as string;
   console.log(router);
   console.log(code);
   const getResult = async (code: string) => {
@@ -34,7 +33,7 @@ function login() {
       console.log('error: ', error);
     }
   }
-  useEffect(() => {}, [code]);
+  // useEffect(() => {}, [code]);
 
   return <Box></Box>;
 }
