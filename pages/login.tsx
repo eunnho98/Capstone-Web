@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
 function login() {
-  let userData: any;
+  // let userData: any;
   const [user, setUser] = useRecoilState(userState);
   const router = useRouter();
   const [code, setCode] = useState('');
@@ -23,20 +23,20 @@ function login() {
     try {
       const result: any = getResult(code);
       console.log('result', result);
-      userData = {
-        nickname: result.data.nickname,
-        username: result.data.username,
-        email: result.data.email,
-        accessToken: result.headers.authorization,
-      };
-      console.log(userData);
+      // userData = {
+      //   nickname: result.data.nickname,
+      //   username: result.data.username,
+      //   email: result.data.email,
+      //   accessToken: result.headers.authorization,
+      // };
+      // console.log(userData);
     } catch (error) {
       console.log('error: ', error);
     }
   }
   useEffect(() => {}, [code]);
 
-  return <Box>{userData && userData}</Box>;
+  return <Box></Box>;
 }
 
 export default login;
