@@ -76,7 +76,7 @@ function userInfo() {
   };
 
   const onLogout = () => {
-    logout2(user.accessToken)
+    logout(user.accessToken)
       .then((res) => {
         console.log(res);
         const userData = {
