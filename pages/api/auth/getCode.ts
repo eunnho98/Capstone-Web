@@ -4,7 +4,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    console.log(req);
     const { code } = req.query;
     console.log('code:', code);
     try {
@@ -14,12 +13,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           params: { code: code },
         },
       );
-      console.log('result', result);
-      console.log('header', result.headers);
+      console.log('result data', result.data);
+      console.log('header', result.headers.authorization);
       res.statusCode = 200;
-      const ssibal = JSON.stringify(result);
-      console.log(ssibal);
-      res.send(ssibal);
     } catch (error) {
       console.log(error);
       res.statusCode = 500;
