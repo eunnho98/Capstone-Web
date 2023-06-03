@@ -2,14 +2,15 @@ import { userState } from '@/atom/atom';
 import { Button, Box } from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
 function login() {
   let userData: any;
   const [user, setUser] = useRecoilState(userState);
   const router = useRouter();
-  const code = router.query.code as string;
+  const [code, setCode] = useState('');
+  setCode(router.query.code as string);
   console.log(router);
   console.log(code);
   const getResult = async (code: string) => {
@@ -18,9 +19,10 @@ function login() {
     });
     return result;
   };
-  if (code) {
+  if (code !== undefined) {
     try {
       const result: any = getResult(code);
+      console.log('result', result);
       userData = {
         nickname: result.data.nickname,
         username: result.data.username,
@@ -32,6 +34,7 @@ function login() {
       console.log('error: ', error);
     }
   }
+  useEffect(() => {}, [code]);
 
   return <Box>{userData && userData}</Box>;
 }
