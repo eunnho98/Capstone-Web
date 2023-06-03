@@ -1,6 +1,6 @@
-import axios from '.';
+import axios from 'axios';
 
-export const loginAPI = () => axios.get('/login/oauth2/code/google');
-
-export const getCodeAPI = () =>
-  axios.get('https://capstone-web-zeta.vercel.app/api/auth/getCode');
+export const loginAPI = (code: string) =>
+  axios.get('/login/oauth2/code/google', {
+    params: { code: code },
+  });

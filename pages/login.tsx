@@ -1,4 +1,5 @@
 import { userState } from '@/atom/atom';
+import { loginAPI } from '@/lib/api/auth';
 import { Button, Heading, SlideFade, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -10,12 +11,8 @@ function login() {
   const [user, setUser] = useRecoilState(userState);
   const router = useRouter();
   const code = router.query.code as string;
-  console.log(router);
-  console.log(code);
   const getResult = async (code: string) => {
-    const result = await axios.get('/login/oauth2/code/google', {
-      params: { code: code },
-    });
+    const result = await loginAPI(code);
     return result;
   };
   if (code !== undefined) {
@@ -34,13 +31,13 @@ function login() {
     }
   }
 
-  // if (!user.nickname) {
-  //   return (
-  //     <Heading textAlign="center" p="200px 40px">
-  //       Loading...
-  //     </Heading>
-  //   );
-  // }
+  if (!user.nickname) {
+    return (
+      <Heading textAlign="center" p="200px 40px">
+        Loading...
+      </Heading>
+    );
+  }
 
   return (
     <VStack p="200px 40px" gap={4}>

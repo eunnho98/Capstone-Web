@@ -17,7 +17,7 @@ interface IUserData {
 }
 
 export const userState = atom<IUserData>({
-  key: 'userState',
+  key: 'AuserState',
   default: {
     nickname: '',
     username: '',
@@ -28,7 +28,7 @@ export const userState = atom<IUserData>({
 });
 
 export const getAccessToken = selector({
-  key: 'accessToken',
+  key: 'AaccessToken',
   get: ({ get }) => {
     const copy = get(userState);
     return copy.accessToken;

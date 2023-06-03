@@ -1,7 +1,15 @@
 import { EmailIcon, KeyIcon, EyeIcon, EyeCloseIcon } from '@/Icons/icons';
 import CommonInput from '@/components/CommonInput';
 import ShaderText from '@/components/ShaderText';
-import { Box, Button, Tab, TabList, Tabs, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Tab,
+  TabList,
+  Tabs,
+  VStack,
+  useToast,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -31,11 +39,21 @@ function login() {
   const { control, watch, setValue } = useForm<IForm>();
   const [valid, setValid] = useState(false);
   const router = useRouter();
+  const toast = useToast();
   const onClick = (e) => {
     setAuthMode(e.target.value);
     setValue('email', '');
     setValue('password', '');
     setValue('checkPassword', '');
+  };
+
+  const onLogin = () => {
+    toast({
+      title: '현재 지원하지 않습니다. \n구글로 이용해주세요!',
+      status: 'error',
+      duration: 4000,
+      isClosable: true,
+    });
   };
 
   useEffect(() => {
@@ -63,7 +81,7 @@ function login() {
     }
   });
 
-  const onLogin = () => {
+  const onGoogleLogin = () => {
     const googleLoginURL =
       'https://accounts.google.com/o/oauth2/v2/auth?scope=openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&access_type=offline&include_granted_scope=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=https://capstone-web-zeta.vercel.app/login&client_id=759416534029-0idv1eac509hpu7h66na8bn4pug1k9ou.apps.googleusercontent.com';
     router.push(googleLoginURL);
@@ -127,6 +145,7 @@ function login() {
         mt="36px"
         isDisabled={!valid}
         letterSpacing="2px"
+        onClick={onLogin}
       >
         {authMode === 'login' ? '로그인' : '회원가입'}
       </Button>
@@ -134,7 +153,7 @@ function login() {
         w="100%"
         colorScheme="messenger"
         mt="18px"
-        onClick={onLogin}
+        onClick={onGoogleLogin}
         letterSpacing="1px"
       >
         구글로 시작하기

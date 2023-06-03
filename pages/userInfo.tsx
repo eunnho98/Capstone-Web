@@ -1,4 +1,5 @@
 import { EmailIcon, EyeCloseIcon, EyeIcon, KeyIcon } from '@/Icons/icons';
+import { userState } from '@/atom/atom';
 import CommonInput from '@/components/CommonInput';
 import {
   Avatar,
@@ -21,6 +22,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
 
 const tmpFriend = [
   {
@@ -52,6 +54,7 @@ const customTabProps = {
 };
 
 function userInfo() {
+  const [user, setUser] = useRecoilState(userState);
   const { handleSubmit, control, watch } = useForm<IForm>();
   const toast = useToast();
 
@@ -68,8 +71,8 @@ function userInfo() {
 
   const onClickInfo = () => {
     toast({
-      title: '정보 수정 완료!',
-      status: 'success',
+      title: '구글로 로그인하였습니다. \n정보 수정이 불가능합니다.',
+      status: 'error',
       duration: 4000,
       isClosable: true,
     });
@@ -85,7 +88,7 @@ function userInfo() {
           <Tab {...customTabProps}>친구찾기</Tab>
         </TabList>
         <Heading textAlign="center" mt="12px">
-          김은호
+          {user.nickname}
         </Heading>
         <Avatar
           bg="gray.400"
@@ -106,7 +109,7 @@ function userInfo() {
               boxShadow="0 2px 16px rgba(0, 0, 0, 0.12)"
             >
               <CardHeader>
-                <Heading size="lg">Hello@khu.ac.kr</Heading>
+                <Heading size="lg">{user.email}</Heading>
                 <Text textAlign="center" mt="6px" fontSize="18px">
                   친구목록
                 </Text>
