@@ -15,7 +15,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       );
       console.log('result data', result.data);
       console.log('header', result.headers.authorization);
+      const userData = {
+        nickname: result.data.nickname,
+        username: result.data.username,
+        email: result.data.email,
+        accessToken: result.headers.authorization,
+      };
       res.statusCode = 200;
+      res.json(userData);
     } catch (error) {
       console.log(error);
       res.statusCode = 500;

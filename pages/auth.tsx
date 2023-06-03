@@ -118,6 +118,9 @@ function login() {
       'https://capstone-web-zeta.vercel.app/api/auth/getCode',
     );
     console.log(res);
+    if (res) {
+      router.push('https://capstone-web-zeta.vercel.app/api/userInfo');
+    }
   };
 
   return (
