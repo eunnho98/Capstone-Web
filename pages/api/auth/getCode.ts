@@ -5,6 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     const { code } = req.query;
+    const url = 'https://capstone-web-zeta.vercel.app/auth';
     console.log('code:', code);
     try {
       const result = await axios.get(
@@ -21,7 +22,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         email: result.data.email,
         accessToken: result.headers.authorization,
       };
-      res.statusCode = 200;
+      res.statusCode = 302;
+      res.setHeader('Location', url);
       res.json(userData);
     } catch (error) {
       console.log(error);
