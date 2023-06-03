@@ -21,6 +21,7 @@ import {
   VStack,
   useToast,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -65,9 +66,18 @@ function userInfo() {
     return res;
   };
 
+  const logout2 = async (token: string) => {
+    const res = await axios.get('https://yokhuroute.store/oauth2/sign-out', {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return res;
+  };
+
   const onLogout = () => {
-    try {
-      logout(user.accessToken).then((res) => {
+    logout2(user.accessToken)
+      .then((res) => {
         console.log(res);
         const userData = {
           nickname: '',
@@ -76,11 +86,11 @@ function userInfo() {
           accessToken: '',
         };
         setUser(userData);
+        router.push('/auth');
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      router.push('/auth');
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const onClickFriend = () => {
