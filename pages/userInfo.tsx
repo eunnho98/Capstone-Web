@@ -1,7 +1,8 @@
 import { EmailIcon, EyeCloseIcon, EyeIcon, KeyIcon } from '@/Icons/icons';
 import { userState } from '@/atom/atom';
 import CommonInput from '@/components/CommonInput';
-import { logoutAPI } from '@/lib/api/auth';
+import { logoutAPI, withdrawAPI } from '@/lib/api/auth';
+import { addFriendAPI, getFriendAPI } from '@/lib/api/friend';
 import {
   Avatar,
   AvatarBadge,
@@ -20,13 +21,18 @@ import {
   Text,
   VStack,
   useToast,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalCloseButton,
+  useDisclosure,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
-import dynamic from 'next/dynamic';
 
 const tmpFriend = [
   {
@@ -58,23 +64,47 @@ const customTabProps = {
 };
 
 function userInfo() {
+  const [hide, setHide] = useState<boolean>(true);
+  const [checkHide, setCheckHide] = useState<boolean>(true);
   const [user, setUser] = useRecoilState(userState);
-  const { control } = useForm<IForm>();
+  const { control, getValues } = useForm<IForm>();
   const toast = useToast();
   const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const buttonProps = {
+    display: 'block',
+    w: '140px',
+    h: '40px',
+    fontSize: '20px',
+    justifyContent: 'center',
+    margin: '0 auto',
+  };
+  const [tmp, setTmp] = useState<any[]>([]);
+
   const logout = async (token: string) => {
     const res = await logoutAPI(token);
     return res;
   };
 
-  const logout2 = async (token: string) => {
-    const res = await axios.get('https://yokhuroute.store/oauth2/sign-out', {
-      headers: {
-        Authorization: token,
-      },
-    });
+  const withdraw = async (token: string) => {
+    const res = await withdrawAPI(token);
     return res;
   };
+
+  const getFriend = async (token: string) => {
+    const res = await getFriendAPI(token);
+    return res;
+  };
+
+  useEffect(() => {
+    getFriend('Bearer ' + user.accessToken)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  }, []);
 
   const onLogout = () => {
     if (typeof window === undefined) {
@@ -89,7 +119,30 @@ function userInfo() {
             email: '',
             accessToken: '',
           };
-          window.localStorage.removeItem('userSession');
+          window.localStorage.clear();
+          setUser(userData);
+          router.push('/auth');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  const onWithdraw = () => {
+    if (typeof window === undefined) {
+      return;
+    } else {
+      withdraw('Bearer ' + user.accessToken)
+        .then((res) => {
+          console.log(res);
+          const userData = {
+            nickname: '',
+            username: '',
+            email: '',
+            accessToken: '',
+          };
+          window.localStorage.clear();
           setUser(userData);
           router.push('/auth');
         })
@@ -100,12 +153,26 @@ function userInfo() {
   };
 
   const onClickFriend = () => {
-    toast({
-      title: '친구 요청 완료!',
-      status: 'success',
-      duration: 4000,
-      isClosable: true,
-    });
+    const friend = getValues('friend');
+    addFriendAPI(friend)
+      .then((res) => {
+        console.log(res);
+        toast({
+          title: '친구 요청 완료!',
+          status: 'success',
+          duration: 4000,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        console.log(error.response);
+        toast({
+          title: '등록되지 않은 사용자입니다.!',
+          status: 'error',
+          duration: 4000,
+          isClosable: true,
+        });
+      });
   };
 
   const onClickInfo = () => {
@@ -116,8 +183,7 @@ function userInfo() {
       isClosable: true,
     });
   };
-  const [hide, setHide] = useState<boolean>(true);
-  const [checkHide, setCheckHide] = useState<boolean>(true);
+
   return (
     <Box p="36px 12px">
       <Tabs isFitted variant="soft-rounded">
@@ -173,19 +239,28 @@ function userInfo() {
                 </VStack>
               </CardBody>
             </Card>
-            <Button
-              display="block"
-              w="140px"
-              h="40px"
-              fontSize="20px"
-              justifyContent="center"
-              colorScheme="purple"
-              margin="0 auto"
-              mt="24px"
-              onClick={onLogout}
-            >
-              로그아웃
-            </Button>
+            <HStack mt="24px">
+              <Button {...buttonProps} colorScheme="purple" onClick={onLogout}>
+                로그아웃
+              </Button>
+              <Button {...buttonProps} colorScheme="orange" onClick={onOpen}>
+                회원탈퇴
+              </Button>
+              {/* Modal */}
+              <Modal onClose={onClose} isOpen={isOpen} isCentered size="xs">
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>정말 탈퇴할까요?</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalFooter gap={2}>
+                    <Button onClick={onWithdraw}>네</Button>
+                    <Button onClick={onClose} colorScheme="orange">
+                      아니요
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
+            </HStack>
           </TabPanel>
           {/* 정보수정 */}
           <TabPanel>
@@ -220,13 +295,8 @@ function userInfo() {
               />
             </VStack>
             <Button
-              display="block"
-              w="140px"
-              h="40px"
-              fontSize="20px"
-              justifyContent="center"
+              {...buttonProps}
               colorScheme="purple"
-              margin="0 auto"
               mt="48px"
               onClick={onClickInfo}
             >

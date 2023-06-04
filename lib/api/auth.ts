@@ -11,3 +11,10 @@ export const logoutAPI = (token: string) =>
       Authorization: token,
     },
   });
+
+export const withdrawAPI = (token: string) =>
+  axios.delete('/oauth2/withdraw', {
+    headers: {
+      Authorization: token,
+    },
+  });
