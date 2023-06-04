@@ -33,6 +33,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
+import LocalStorage from '@/lib/LocalStorage';
 
 const tmpFriend = [
   {
@@ -99,26 +100,28 @@ function userInfo() {
   };
 
   useEffect(() => {
-    const accessToken = JSON.parse(
-      window.localStorage.getItem('user'),
-    ).accessToken;
-    console.log('accessToken', accessToken);
-    getFriend('Bearer ' + accessToken)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
+    if (JSON.parse(LocalStorage.getItem('user')) !== null) {
+      const accessToken = JSON.parse(LocalStorage.getItem('user')).accessToken;
+      try {
+        console.log('accessToken', accessToken);
+        getFriend('Bearer ' + accessToken)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error.response);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }, []);
 
   const onLogout = () => {
     if (typeof window === undefined) {
       return;
     } else {
-      const accessToken = JSON.parse(
-        window.localStorage.getItem('user'),
-      ).accessToken;
+      const accessToken = JSON.parse(LocalStorage.getItem('user')).accessToken;
       logout('Bearer ' + accessToken)
         .then((res) => {
           console.log(res);
@@ -142,9 +145,7 @@ function userInfo() {
     if (typeof window === undefined) {
       return;
     } else {
-      const accessToken = JSON.parse(
-        window.localStorage.getItem('user'),
-      ).accessToken;
+      const accessToken = JSON.parse(LocalStorage.getItem('user')).accessToken;
       withdraw('Bearer ' + accessToken)
         .then((res) => {
           console.log(res);
@@ -165,26 +166,31 @@ function userInfo() {
   };
 
   const onClickFriend = () => {
-    const friend = getValues('friend');
-    addFriendAPI(friend)
-      .then((res) => {
-        console.log(res);
-        toast({
-          title: '친구 요청 완료!',
-          status: 'success',
-          duration: 4000,
-          isClosable: true,
+    if (typeof window === undefined) {
+      return;
+    } else {
+      const accessToken = JSON.parse(LocalStorage.getItem('user')).accessToken;
+      const friend = getValues('friend');
+      addFriendAPI(friend, 'Bearer ' + accessToken)
+        .then((res) => {
+          console.log(res);
+          toast({
+            title: '친구 요청 완료!',
+            status: 'success',
+            duration: 4000,
+            isClosable: true,
+          });
+        })
+        .catch((error) => {
+          console.log(error.response);
+          toast({
+            title: '등록되지 않은 사용자입니다.!',
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          });
         });
-      })
-      .catch((error) => {
-        console.log(error.response);
-        toast({
-          title: '등록되지 않은 사용자입니다.!',
-          status: 'error',
-          duration: 4000,
-          isClosable: true,
-        });
-      });
+    }
   };
 
   const onClickInfo = () => {
@@ -199,27 +205,29 @@ function userInfo() {
   if (typeof window === undefined) {
     return <Heading p="200px 40px">Loading...</Heading>;
   } else {
-    if (window.localStorage.getItem('user') === null) {
-      <VStack p="200px 40px" gap={4}>
-        <Heading>로그인이 필요합니다!</Heading>
-        <Button
-          w="240px"
-          h="50px"
-          fontSize="24px"
-          letterSpacing="2px"
-          lineHeight="32px"
-          display="block"
-          colorScheme="purple"
-          onClick={() => {
-            router.push('/auth');
-          }}
-        >
-          로그인하러 가기
-        </Button>
-      </VStack>;
+    if (LocalStorage.getItem('user') === null) {
+      return (
+        <VStack p="200px 40px" gap={4}>
+          <Heading>로그인이 필요합니다!</Heading>
+          <Button
+            w="240px"
+            h="50px"
+            fontSize="24px"
+            letterSpacing="2px"
+            lineHeight="32px"
+            display="block"
+            colorScheme="purple"
+            onClick={() => {
+              router.push('/auth');
+            }}
+          >
+            로그인하러 가기
+          </Button>
+        </VStack>
+      );
     } else {
-      const nickname = JSON.parse(window.localStorage.getItem('user')).nickname;
-      const email = JSON.parse(window.localStorage.getItem('user')).email;
+      const nickname = JSON.parse(LocalStorage.getItem('user')).nickname;
+      const email = JSON.parse(LocalStorage.getItem('user')).email;
       return (
         <Box p="36px 12px">
           <Tabs isFitted variant="soft-rounded">

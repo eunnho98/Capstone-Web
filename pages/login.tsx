@@ -4,6 +4,7 @@ import { Button, Heading, SlideFade, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
+import LocalStorage from '@/lib/LocalStorage';
 
 function login() {
   const [shade, setShade] = useState(false);
@@ -38,26 +39,28 @@ function login() {
   if (typeof window === undefined) {
     return <Heading p="200px 40px">Loading...</Heading>;
   } else {
-    if (window.localStorage.getItem('user') === null) {
-      <VStack p="200px 40px" gap={4}>
-        <Heading>로그인이 필요합니다!</Heading>
-        <Button
-          w="240px"
-          h="50px"
-          fontSize="24px"
-          letterSpacing="2px"
-          lineHeight="32px"
-          display="block"
-          colorScheme="purple"
-          onClick={() => {
-            router.push('/auth');
-          }}
-        >
-          로그인하러 가기
-        </Button>
-      </VStack>;
+    if (LocalStorage.getItem('user') === null) {
+      return (
+        <VStack p="200px 40px" gap={4}>
+          <Heading>로그인이 필요합니다!</Heading>
+          <Button
+            w="240px"
+            h="50px"
+            fontSize="24px"
+            letterSpacing="2px"
+            lineHeight="32px"
+            display="block"
+            colorScheme="purple"
+            onClick={() => {
+              router.push('/auth');
+            }}
+          >
+            로그인하러 가기
+          </Button>
+        </VStack>
+      );
     } else {
-      const nickname = JSON.parse(window.localStorage.getItem('user')).nickname;
+      const nickname = JSON.parse(LocalStorage.getItem('user')).nickname;
       return (
         <VStack p="200px 40px" gap={4}>
           <SlideFade
