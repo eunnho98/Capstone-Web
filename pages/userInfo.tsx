@@ -26,6 +26,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
+import dynamic from 'next/dynamic';
 
 const tmpFriend = [
   {
@@ -76,21 +77,26 @@ function userInfo() {
   };
 
   const onLogout = () => {
-    logout('Bearer ' + user.accessToken)
-      .then((res) => {
-        console.log(res);
-        const userData = {
-          nickname: '',
-          username: '',
-          email: '',
-          accessToken: '',
-        };
-        setUser(userData);
-        router.push('/auth');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (typeof window === undefined) {
+      return;
+    } else {
+      logout('Bearer ' + user.accessToken)
+        .then((res) => {
+          console.log(res);
+          const userData = {
+            nickname: '',
+            username: '',
+            email: '',
+            accessToken: '',
+          };
+          window.localStorage.removeItem('userSession');
+          setUser(userData);
+          router.push('/auth');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const onClickFriend = () => {
