@@ -1,9 +1,12 @@
 import axios from 'axios';
 
 export const addFriendAPI = (email: string, token: string) =>
-  axios.post(`/follow/${email}`, null, {
+  axios.post('/follow', null, {
     headers: {
       Authorization: token,
+    },
+    params: {
+      email: email,
     },
   });
 
