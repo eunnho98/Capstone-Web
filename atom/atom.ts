@@ -1,13 +1,4 @@
 import { atom, selector } from 'recoil';
-import { recoilPersist } from 'recoil-persist';
-
-const localStorage =
-  typeof window !== 'undefined' ? window.localStorage : undefined;
-
-const { persistAtom } = recoilPersist({
-  key: 'userSession',
-  storage: localStorage,
-});
 
 interface IUserData {
   nickname: string;
@@ -24,7 +15,6 @@ export const userState = atom<IUserData>({
     email: '',
     accessToken: '',
   },
-  effects_UNSTABLE: [persistAtom],
 });
 
 export const getAccessToken = selector({
