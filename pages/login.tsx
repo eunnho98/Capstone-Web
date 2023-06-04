@@ -9,6 +9,7 @@ import LocalStorage from '@/lib/LocalStorage';
 function login() {
   const [shade, setShade] = useState(false);
   const [user, setUser] = useRecoilState(userState);
+  const [update, setUpdate] = useState(false);
   const router = useRouter();
   const code = router.query.code as string;
   const getResult = async (code: string) => {
@@ -28,7 +29,8 @@ function login() {
           };
           setUser(userData);
           const userObj = JSON.stringify(userData);
-          window.localStorage.setItem('user', userObj);
+          LocalStorage.setItem('user', userObj);
+          setUpdate(true);
         });
       } catch (error) {
         console.log('error: ', error);
@@ -62,42 +64,44 @@ function login() {
     } else {
       const nickname = JSON.parse(LocalStorage.getItem('user')).nickname;
       return (
-        <VStack p="200px 40px" gap={4}>
-          <SlideFade
-            in={true}
-            offsetY="20px"
-            transition={{ enter: { duration: 0.5 } }}
-            onAnimationComplete={() => {
-              setShade(true);
-            }}
-          >
-            <Heading textAlign="center" fontSize="42px">
-              환영합니다
-              <br />
-              {nickname}님!
-            </Heading>
-          </SlideFade>
-          <SlideFade
-            in={shade}
-            offsetY="20px"
-            transition={{ enter: { duration: 0.5 } }}
-          >
-            <Button
-              w="240px"
-              h="50px"
-              fontSize="24px"
-              letterSpacing="2px"
-              lineHeight="32px"
-              display="block"
-              colorScheme="purple"
-              onClick={() => {
-                router.push('/userInfo');
+        { update } && (
+          <VStack p="200px 40px" gap={4}>
+            <SlideFade
+              in={true}
+              offsetY="20px"
+              transition={{ enter: { duration: 0.5 } }}
+              onAnimationComplete={() => {
+                setShade(true);
               }}
             >
-              메인페이지로 이동
-            </Button>
-          </SlideFade>
-        </VStack>
+              <Heading textAlign="center" fontSize="42px">
+                환영합니다
+                <br />
+                {nickname}님!
+              </Heading>
+            </SlideFade>
+            <SlideFade
+              in={shade}
+              offsetY="20px"
+              transition={{ enter: { duration: 0.5 } }}
+            >
+              <Button
+                w="240px"
+                h="50px"
+                fontSize="24px"
+                letterSpacing="2px"
+                lineHeight="32px"
+                display="block"
+                colorScheme="purple"
+                onClick={() => {
+                  router.push('/userInfo');
+                }}
+              >
+                메인페이지로 이동
+              </Button>
+            </SlideFade>
+          </VStack>
+        )
       );
     }
   }
