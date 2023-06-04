@@ -76,7 +76,7 @@ function userInfo() {
   };
 
   const onLogout = () => {
-    logout(user.accessToken)
+    logout('Bearer ' + user.accessToken)
       .then((res) => {
         console.log(res);
         const userData = {
