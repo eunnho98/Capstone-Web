@@ -154,7 +154,7 @@ function userInfo() {
 
   const onClickFriend = () => {
     const friend = getValues('friend');
-    addFriendAPI(friend)
+    addFriendAPI(friend, 'Bearer ' + user.accessToken)
       .then((res) => {
         console.log(res);
         toast({
