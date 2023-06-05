@@ -2,7 +2,11 @@ import { EmailIcon, EyeCloseIcon, EyeIcon, KeyIcon } from '@/Icons/icons';
 import { userState } from '@/atom/atom';
 import CommonInput from '@/components/CommonInput';
 import { logoutAPI, withdrawAPI } from '@/lib/api/auth';
-import { addFriendAPI, getFriendAPI } from '@/lib/api/friend';
+import {
+  addFriendAPI,
+  addFriendAPIByNext,
+  getFriendAPI,
+} from '@/lib/api/friend';
 import {
   Avatar,
   AvatarBadge,
@@ -152,7 +156,12 @@ function userInfo() {
 
   const onClickFriend = () => {
     const friend = getValues('friend');
-    addFriendAPI(friend, 'Bearer ' + user.accessToken)
+    const token = 'Bearer ' + user.accessToken;
+    const friendBody = {
+      email: friend,
+      token: token,
+    };
+    addFriendAPIByNext(friendBody)
       .then((res) => {
         console.log(res);
         toast({
