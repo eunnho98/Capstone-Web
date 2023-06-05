@@ -7,6 +7,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const { email, token } = req.body;
+    console.log('email:', email);
+    console.log('token', token);
     if (!email || !token) {
       res.statusCode = 400;
       return res.send('필수 데이터가 없습니다.');
@@ -20,8 +22,10 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           email: email,
         },
       });
+      console.log('result', result);
       return res.send(result);
     } catch (error) {
+      console.log('error', error.response);
       return res.send(error.response);
     }
   }
