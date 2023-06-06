@@ -1,12 +1,8 @@
 import { EmailIcon, EyeCloseIcon, EyeIcon, KeyIcon } from '@/Icons/icons';
 import { userState } from '@/atom/atom';
 import CommonInput from '@/components/CommonInput';
-import { logoutAPI, withdrawAPI } from '@/lib/api/auth';
-import {
-  addFriendAPI,
-  addFriendAPIByNext,
-  getFriendAPI,
-} from '@/lib/api/friend';
+import { logoutAPI, withdrawByNext } from '@/lib/api/auth';
+import { addFriendAPIByNext, getFriendByNext } from '@/lib/api/friend';
 import {
   Avatar,
   AvatarBadge,
@@ -81,25 +77,14 @@ function userInfo() {
     justifyContent: 'center',
     margin: '0 auto',
   };
-  const [tmp, setTmp] = useState<any[]>([]);
 
   const logout = async (token: string) => {
     const res = await logoutAPI(token);
     return res;
   };
 
-  const withdraw = async (token: string) => {
-    const res = await withdrawAPI(token);
-    return res;
-  };
-
-  const getFriend = async (token: string) => {
-    const res = await getFriendAPI(token);
-    return res;
-  };
-
   useEffect(() => {
-    getFriend('Bearer ' + user.accessToken)
+    getFriendByNext('Bearer ' + user.accessToken)
       .then((res) => {
         console.log(res);
       })
@@ -135,7 +120,7 @@ function userInfo() {
     if (typeof window === undefined) {
       return;
     } else {
-      withdraw('Bearer ' + user.accessToken)
+      withdrawByNext('Bearer ' + user.accessToken)
         .then((res) => {
           console.log(res);
           const userData = {

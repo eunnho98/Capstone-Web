@@ -18,3 +18,10 @@ export const withdrawAPI = (token: string) =>
       Authorization: token,
     },
   });
+
+export const withdrawByNext = (token: string) =>
+  axios.get('https://capstone-web-zeta.vercel.app/api/auth/deleteUser', {
+    headers: {
+      Authorization: token,
+    },
+  });

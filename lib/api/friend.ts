@@ -24,3 +24,10 @@ export const getFriendAPI = (token: string) =>
 
 export const addFriendAPIByNext = (body: AddFriendBody) =>
   axios.post('https://capstone-web-zeta.vercel.app/api/friend/addFriend', body);
+
+export const getFriendByNext = (token: string) =>
+  axios.get('https://capstone-web-zeta.vercel.app/api/friend/getFriend', {
+    headers: {
+      Authorization: token,
+    },
+  });
