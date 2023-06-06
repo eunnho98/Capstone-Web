@@ -69,6 +69,11 @@ function userInfo() {
   const toast = useToast();
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [trigger, setTrigger] = useState(0);
+  const onClickTrigger = () => {
+    setTrigger((prev) => prev + 1);
+  };
+
   const buttonProps = {
     display: 'block',
     w: '140px',
@@ -91,7 +96,7 @@ function userInfo() {
       .catch((error) => {
         console.log(error.response);
       });
-  }, []);
+  }, [trigger]);
 
   const onLogout = () => {
     if (typeof window === undefined) {
@@ -158,12 +163,21 @@ function userInfo() {
       })
       .catch((error) => {
         console.log(error.response);
-        toast({
-          title: '등록되지 않은 사용자입니다.!',
-          status: 'error',
-          duration: 4000,
-          isClosable: true,
-        });
+        if (error.response.status === 405) {
+          toast({
+            title: '이미 친구입니다!',
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: '등록되지 않은 사용자입니다!',
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          });
+        }
       });
   };
 
@@ -180,7 +194,9 @@ function userInfo() {
     <Box p="36px 12px">
       <Tabs isFitted variant="soft-rounded">
         <TabList w="100%" h="50px" gap={2}>
-          <Tab {...customTabProps}>내정보</Tab>
+          <Tab {...customTabProps} onClick={onClickTrigger}>
+            내정보
+          </Tab>
           <Tab {...customTabProps}>정보수정</Tab>
           <Tab {...customTabProps}>친구찾기</Tab>
         </TabList>

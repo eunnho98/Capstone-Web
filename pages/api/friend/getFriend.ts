@@ -19,12 +19,10 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           },
         },
       );
-      console.log('result', result.data);
-      console.log('token', token);
+      console.log('result', result);
       return res.send(result);
     } catch (error) {
       console.log('error', error.response);
-      console.log('token', token);
       return res.send(error.response);
     }
   }
