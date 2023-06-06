@@ -24,6 +24,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       return res.send(result);
     } catch (error) {
       console.log('error', error.response);
+      console.log('token', token);
       return res.send(error.response);
     }
   }

@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // post /follow, 쿼리로 이메일, 헤더에 토큰
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'DELETE') {
+  if (req.method === 'GET') {
     const token = req.headers.authorization;
 
     if (!token) {
